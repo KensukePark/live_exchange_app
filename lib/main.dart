@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'screens/home_page.dart';
+import 'views/text_detector_view.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: '실시간 가격 환산 앱',
-      home: HomePage(),
+      home: TextRecognizerView(),
     );
   }
 }
