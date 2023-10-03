@@ -1,3 +1,4 @@
+/*
 import 'dart:async';
 import 'dart:developer';
 import 'package:flutter/material.dart';
@@ -46,8 +47,8 @@ class _HomePageState extends State<HomePage> {
                       ..color = const Color.fromARGB(153, 102, 160, 241),
                     boxLeftOff: 6,
                     boxBottomOff: 4,
-                    boxRightOff: 4,
-                    boxTopOff: 6,
+                    boxRightOff: 6,
+                    boxTopOff: 4,
                     boxHeight: MediaQuery.of(context).size.height / 3.5,
                     getRawData: (value) {
                       inspect(value);
@@ -72,11 +73,7 @@ class _HomePageState extends State<HomePage> {
 }
 
 class Result extends StatelessWidget {
-  const Result({
-    Key? key,
-    required this.text,
-  }) : super(key: key);
-
+  const Result({Key? key,required this.text,}) : super(key: key);
   final String text;
 
   @override
@@ -104,3 +101,5 @@ class Result extends StatelessWidget {
     );
   }
 }
+
+ */
