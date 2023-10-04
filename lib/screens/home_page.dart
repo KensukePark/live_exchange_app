@@ -13,8 +13,10 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   String text = '';
-  String scaned_cur = 'Unknown';
-  num scaned_price = -65535;
+  String scaned_cur = '?';
+  String scaned_price = '';
+  String symbol = '';
+  List<String> cur_list = ['KRW', 'USD', 'CNY', 'JPY'];
   final StreamController<String> controller_stream = StreamController<String>();
   void setText(value) {
     controller_stream.add(value);
@@ -146,27 +148,79 @@ class _HomePageState extends State<HomePage> {
                           String temp = '';
                           if (snapshot.data!.contains(r'$')) {
                             scaned_cur = 'USD';
+                            symbol = r'$';
+                            cur_list.remove('USD');
                           }
                           else if (snapshot.data!.contains('円') || snapshot.data!.contains('¥')) {
-                            scaned_cur = 'JPN';
+                            scaned_cur = 'JPY';
+                            symbol = '¥';
+                            cur_list.remove('JPY');
                           }
                           else if (snapshot.data!.contains('元') || snapshot.data!.contains('¥')) {
                             scaned_cur = 'CNY';
+                            symbol = '¥';
+                            cur_list.remove('CNY');
                           }
                           else if (snapshot.data!.contains('원') || snapshot.data!.contains('w')) {
                             scaned_cur = 'KRW';
+                            symbol = '₩';
+                            cur_list.remove('KRW');
                           }
-                          else scaned_cur = 'Unknown';
+                          else {
+                            scaned_cur = 'Unknown';
+                            cur_list = ['KRW', 'USD', 'CNY', 'JPY'];
+                          }
                           for (int i=0; i<snapshot.data!.length; i++) {
                             if (int.tryParse(snapshot.data![i]) != null || snapshot.data![i] == '.' && temp.length != 0) temp = temp+snapshot.data![i];
                             else if (snapshot.data![i] == ',') continue;
                             if (int.tryParse(snapshot.data![i]) == null && temp.length != 0) break;
                           }
-                          if (temp.isEmpty) scaned_price = -65535;
-                          else scaned_price = num.parse(temp);
+                          if (temp.isEmpty) {
+                            scaned_price = '';
+                            scaned_cur = '?';
+                          }
+                          else scaned_price = symbol + ' ' + temp;
                         }
                         return Result(text: snapshot.data != null ? snapshot.data! : '', cur: scaned_cur, price: scaned_price);
                       },
+                    ),
+                    Expanded(
+                      child: Container(
+                        width: MediaQuery.of(context).size.width - 60,
+                        padding: EdgeInsets.fromLTRB(0, 0, 0, 45),
+                        child: Container(
+                          padding: EdgeInsets.all(15),
+                          decoration: BoxDecoration(
+                              color: Color(0xfff2f2f2),
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.7),
+                                  blurRadius: 5.0,
+                                  spreadRadius: 0.0,
+                                  offset: const Offset(0,7),
+                                )
+                              ]
+                          ),
+                          child: Container(
+                            child: Column(
+                              children: [
+                                ListView.separated(
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: cur_list.length,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    return Container(
+                                      child: Text(cur_list[index]),
+                                    );
+                                  },
+                                  separatorBuilder: (BuildContext context, int index) => SizedBox(height: 10,),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      )
                     ),
                   ],
                 )
@@ -182,7 +236,7 @@ class Result extends StatelessWidget {
   const Result({Key? key,required this.text, required this.cur, required this.price}) : super(key: key);
   final String text;
   final String cur;
-  final num price;
+  final String price;
 
   @override
   Widget build(BuildContext context) {
@@ -219,16 +273,27 @@ class Result extends StatelessWidget {
                           fontSize: 16
                       ),
                     ),
-                    Text(
-                      cur,
-                      style: TextStyle(
-                          fontSize: 16
+                    cur != '?' ?
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Color(0xffddf6ff),
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                    ),
+                      child: Container(
+                        padding: EdgeInsets.all(6),
+                        child: Text(
+                          cur,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.blueAccent,
+                          ),
+                        ),
+                      ),
+                    ) : Container(),
                   ],
                 ),
                 Text(
-                  '${price}',
+                  price,
                   style: TextStyle(
                       fontSize: 16
                   ),
@@ -237,55 +302,7 @@ class Result extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(height: 10,),
-        Container(
-          padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height * 0.1,
-          child: Container(
-            padding: EdgeInsets.all(10),
-            decoration: BoxDecoration(
-                color: Color(0xfff2f2f2),
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.7),
-                    blurRadius: 5.0,
-                    spreadRadius: 0.0,
-                    offset: const Offset(0,7),
-                  )
-                ]
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Text(
-                      '인식 결과',
-                      style: TextStyle(
-                          fontSize: 16
-                      ),
-                    ),
-                    Text(
-                      cur,
-                      style: TextStyle(
-                          fontSize: 16
-                      ),
-                    ),
-                  ],
-                ),
-                Text(
-                  '${price}',
-                  style: TextStyle(
-                      fontSize: 16
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+        SizedBox(height: 20,),
       ],
     );
   }
