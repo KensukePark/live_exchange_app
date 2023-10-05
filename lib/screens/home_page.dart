@@ -5,9 +5,10 @@ import 'package:flutter_scalable_ocr/flutter_scalable_ocr.dart';
 import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key, required this.cur_name, required this.cur_rate}) : super(key: key);
-  final cur_name;
-  final cur_rate;
+  const HomePage({Key? key, required this.cur_name, required this.cur_rate, required this.date}) : super(key: key);
+  final List<String> cur_name;
+  final List<num> cur_rate;
+  final String date;
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -21,7 +22,7 @@ class _HomePageState extends State<HomePage> {
   List<String> cur_list = ['KRW', 'USD', 'CNY', 'JPY'];
   List<String> sym_list = ['원', '달러', '위안' , '엔'];
   var now = new DateTime.now().subtract(Duration(days:1));
-  String formatDate = '';
+  String TargetDate = '';
   NumberFormat f = NumberFormat('#,###');
   List<Color> color_list = [
     Color(0xffffdddd),
@@ -45,7 +46,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    formatDate = DateFormat('yyyy.MM.dd').format(now);
+    TargetDate = widget.date.substring(0,4) + '.' + widget.date.substring(4,6) + '.' + widget.date.substring(6) + ' 기준';
   }
   @override
   Widget build(BuildContext context) {
@@ -273,50 +274,6 @@ class _HomePageState extends State<HomePage> {
                                           return Cur_price(color_list: color_list, cur_rate: widget.cur_rate, cur_name: widget.cur_name, cur_list: cur_list, scaned_cur: scaned_cur, sym_list: sym_list, price: price);
                                         },
                                       ),
-                                      /*
-                                      ListView.builder(
-                                        physics: const NeverScrollableScrollPhysics(),
-                                        shrinkWrap: true,
-                                        itemCount: cur_list.length,
-                                        itemBuilder: (BuildContext context, int index) {
-                                          String temp_price = '';
-                                          if (scaned_cur == 'KRW') {
-                                            num temp_cal = price / widget.cur_rate[widget.cur_name.indexOf(cur_list[index])];
-                                            temp_price = f.format(temp_cal);
-                                          }
-                                          return Container(
-                                            padding: EdgeInsets.fromLTRB(3,7, 3,7),
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Container(
-                                                  decoration: BoxDecoration(
-                                                    color: color_list[index],
-                                                    borderRadius: BorderRadius.circular(10),
-                                                  ),
-                                                  child: Container(
-                                                    width: MediaQuery.of(context).size.width/6.5,
-                                                    padding: EdgeInsets.fromLTRB(10, 17, 10, 17),
-                                                    child: Center(
-                                                      child: Text(
-                                                        cur_list[index],
-                                                        style: TextStyle(
-                                                          fontSize: 16,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                Text(
-                                                  temp_price,
-                                                )
-                                              ],
-                                            ),
-                                          );
-                                        },
-                                      ),
-
-                                       */
                                     ],
                                   ),
                                 ),
@@ -325,7 +282,7 @@ class _HomePageState extends State<HomePage> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
-                                      Text(formatDate + ' 기준'),
+                                      Text(TargetDate),
                                     ],
                                   ),
                                 ),

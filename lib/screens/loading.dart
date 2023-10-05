@@ -51,7 +51,6 @@ class _LoadingState extends State<Loading> {
       Data = await network.getData();
       print(Data);
     }
-
      */
     print(Data);
     print(formatDate);
@@ -77,12 +76,9 @@ class _LoadingState extends State<Loading> {
     }
     print(cur_list);
     print(cur_rate);
-    //Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context){
-    //  return HomePage(cur_name: cur_list, cur_rate: cur_rate,);
-    //}), (route) => false);
-    showDialog(context: context, builder: (BuildContext context) {
-      return Container(child: Text('${days}'),);
-    });
+    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context){
+      return HomePage(cur_name: cur_list, cur_rate: cur_rate, date: formatDate);
+    }), (route) => false);
   } // ...getprice()
 
   @override
