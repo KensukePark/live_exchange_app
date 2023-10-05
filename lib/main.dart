@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:live_currency_rate_app/screens/loading.dart';
 import 'screens/home_page.dart';
 //import 'views/text_detector_view.dart';
 
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: '실시간 가격 환산 앱',
-      home: HomePage(),
+      home: Loading(),
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),

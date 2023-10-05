@@ -2,11 +2,12 @@ import 'dart:async';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_scalable_ocr/flutter_scalable_ocr.dart';
-
+import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
-
+  const HomePage({Key? key, required this.cur_name, required this.cur_rate}) : super(key: key);
+  final cur_name;
+  final cur_rate;
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -16,8 +17,20 @@ class _HomePageState extends State<HomePage> {
   String scaned_cur = '?';
   String scaned_price = '';
   String symbol = '';
+  num price = 0;
   List<String> cur_list = ['KRW', 'USD', 'CNY', 'JPY'];
-  final StreamController<String> controller_stream = StreamController<String>();
+  List<String> sym_list = ['원', '달러', '위안' , '엔'];
+  var now = new DateTime.now().subtract(Duration(days:1));
+  String formatDate = '';
+  NumberFormat f = NumberFormat('#,###');
+  List<Color> color_list = [
+    Color(0xffffdddd),
+    Color(0xffffffdd),
+    Color(0xffddffdd),
+    Color(0xffddddff),
+  ];
+  final StreamController<String> controller_stream = StreamController<String>.broadcast();
+
   void setText(value) {
     controller_stream.add(value);
   }
@@ -29,8 +42,13 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    formatDate = DateFormat('yyyy.MM.dd').format(now);
+  }
+  @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.deepPurpleAccent,
@@ -144,44 +162,81 @@ class _HomePageState extends State<HomePage> {
                     StreamBuilder<String>(
                       stream: controller_stream.stream,
                       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                        bool _check = false;
+                        //인식 결과가 있다면 체크 시작.
                         if (snapshot.data != null) {
                           String temp = '';
+                          //달러 기호 감지
                           if (snapshot.data!.contains(r'$')) {
                             scaned_cur = 'USD';
-                            symbol = r'$';
+                            symbol = '달러';
                             cur_list.remove('USD');
+                            sym_list.remove('달러');
                           }
+                          //엔 한자, 엔 기호 감지
                           else if (snapshot.data!.contains('円') || snapshot.data!.contains('¥')) {
                             scaned_cur = 'JPY';
-                            symbol = '¥';
+                            symbol = '엔';
                             cur_list.remove('JPY');
+                            sym_list.remove('엔');
                           }
+                          //위안 한자, 위안 기호 감지
                           else if (snapshot.data!.contains('元') || snapshot.data!.contains('¥')) {
                             scaned_cur = 'CNY';
-                            symbol = '¥';
+                            symbol = '위안';
                             cur_list.remove('CNY');
+                            sym_list.remove('위안');
                           }
-                          else if (snapshot.data!.contains('원') || snapshot.data!.contains('w')) {
+                          //원, 원기호 감지
+                          else if (snapshot.data!.contains('원') || snapshot.data!.contains('w')  || snapshot.data!.contains('￦') || snapshot.data!.contains('₩')) {
                             scaned_cur = 'KRW';
-                            symbol = '₩';
+                            symbol = '원';
                             cur_list.remove('KRW');
+                            sym_list.remove('원');
                           }
+
+                          //통화 감지를 못했을 경우 일단 unknown 처리
                           else {
                             scaned_cur = 'Unknown';
+                            symbol = '';
                             cur_list = ['KRW', 'USD', 'CNY', 'JPY'];
+                            sym_list = ['원', '달러', '위안' , '엔'];
                           }
+
+                          //숫자 감지 시작
                           for (int i=0; i<snapshot.data!.length; i++) {
                             if (int.tryParse(snapshot.data![i]) != null || snapshot.data![i] == '.' && temp.length != 0) temp = temp+snapshot.data![i];
                             else if (snapshot.data![i] == ',') continue;
                             if (int.tryParse(snapshot.data![i]) == null && temp.length != 0) break;
                           }
+
+                          //숫자 감지 실패
                           if (temp.isEmpty) {
                             scaned_price = '';
                             scaned_cur = '?';
+                            symbol = '';
+                            cur_list = ['KRW', 'USD', 'CNY', 'JPY'];
+                            sym_list = ['원', '달러', '위안' , '엔'];
+                            _check = false;
                           }
-                          else scaned_price = symbol + ' ' + temp;
+                          //숫자 감지 했다면 값 전달
+                          else {
+                            price = num.parse(temp);
+                            NumberFormat f = NumberFormat('#,###');
+                            scaned_price = f.format(price) + ' ' + symbol;
+                            _check = true;
+                          }
                         }
-                        return Result(text: snapshot.data != null ? snapshot.data! : '', cur: scaned_cur, price: scaned_price);
+                        //인식 결과가 없을 때
+                        else {
+                          scaned_price = '';
+                          scaned_cur = '?';
+                          symbol = '';
+                          cur_list = ['KRW', 'USD', 'CNY', 'JPY'];
+                          sym_list = ['원', '달러', '위안' , '엔'];
+                          _check = false;
+                        }
+                        return Result(text: snapshot.data != null ? snapshot.data! : '', cur: scaned_cur, price: scaned_price, check: _check);
                       },
                     ),
                     Expanded(
@@ -204,17 +259,75 @@ class _HomePageState extends State<HomePage> {
                           ),
                           child: Container(
                             child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                ListView.separated(
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  itemCount: cur_list.length,
-                                  itemBuilder: (BuildContext context, int index) {
-                                    return Container(
-                                      child: Text(cur_list[index]),
-                                    );
-                                  },
-                                  separatorBuilder: (BuildContext context, int index) => SizedBox(height: 10,),
+                                Flexible(
+                                  fit: FlexFit.tight,
+                                  flex: 8,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      StreamBuilder<String>(
+                                        stream: controller_stream.stream,
+                                        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                                          return Cur_price(color_list: color_list, cur_rate: widget.cur_rate, cur_name: widget.cur_name, cur_list: cur_list, scaned_cur: scaned_cur, sym_list: sym_list, price: price);
+                                        },
+                                      ),
+                                      /*
+                                      ListView.builder(
+                                        physics: const NeverScrollableScrollPhysics(),
+                                        shrinkWrap: true,
+                                        itemCount: cur_list.length,
+                                        itemBuilder: (BuildContext context, int index) {
+                                          String temp_price = '';
+                                          if (scaned_cur == 'KRW') {
+                                            num temp_cal = price / widget.cur_rate[widget.cur_name.indexOf(cur_list[index])];
+                                            temp_price = f.format(temp_cal);
+                                          }
+                                          return Container(
+                                            padding: EdgeInsets.fromLTRB(3,7, 3,7),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Container(
+                                                  decoration: BoxDecoration(
+                                                    color: color_list[index],
+                                                    borderRadius: BorderRadius.circular(10),
+                                                  ),
+                                                  child: Container(
+                                                    width: MediaQuery.of(context).size.width/6.5,
+                                                    padding: EdgeInsets.fromLTRB(10, 17, 10, 17),
+                                                    child: Center(
+                                                      child: Text(
+                                                        cur_list[index],
+                                                        style: TextStyle(
+                                                          fontSize: 16,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Text(
+                                                  temp_price,
+                                                )
+                                              ],
+                                            ),
+                                          );
+                                        },
+                                      ),
+
+                                       */
+                                    ],
+                                  ),
+                                ),
+                                Flexible(
+                                  fit: FlexFit.tight,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text(formatDate + ' 기준'),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
@@ -233,13 +346,16 @@ class _HomePageState extends State<HomePage> {
 }
 
 class Result extends StatelessWidget {
-  const Result({Key? key,required this.text, required this.cur, required this.price}) : super(key: key);
+  const Result({Key? key,required this.text, required this.cur, required this.price, required this.check}) : super(key: key);
   final String text;
   final String cur;
   final String price;
+  final bool check;
 
   @override
   Widget build(BuildContext context) {
+
+    NumberFormat f = NumberFormat('#,###');
     return Column(
       children: [
         //스캔 결과 박스
@@ -273,7 +389,7 @@ class Result extends StatelessWidget {
                           fontSize: 16
                       ),
                     ),
-                    cur != '?' ?
+                    check == true ?
                     Container(
                       decoration: BoxDecoration(
                         color: Color(0xffddf6ff),
@@ -292,18 +408,79 @@ class Result extends StatelessWidget {
                     ) : Container(),
                   ],
                 ),
+                check == true?
                 Text(
                   price,
                   style: TextStyle(
                       fontSize: 16
                   ),
-                ),
+                ) : Container(),
               ],
             ),
           ),
         ),
         SizedBox(height: 20,),
       ],
+    );
+  }
+}
+
+class Cur_price extends StatelessWidget {
+  const Cur_price({Key? key,required this.cur_rate, required this.cur_name, required this.cur_list, required this.scaned_cur, required this.price, required this.color_list, required this.sym_list}) : super(key: key);
+  final List<num> cur_rate;
+  final List<String> cur_name;
+  final List<String> cur_list;
+  final String scaned_cur;
+  final num price;
+  final List<Color> color_list;
+  final List<String> sym_list;
+  @override
+  Widget build(BuildContext context) {
+    NumberFormat f = NumberFormat('#,###');
+    return ListView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: cur_list.length,
+      itemBuilder: (BuildContext context, int index) {
+        String temp_price = '';
+        if (scaned_cur == 'KRW') {
+          num temp_cal = price / cur_rate[cur_name.indexOf(cur_list[index])];
+          temp_price = temp_cal.toStringAsFixed(2);
+        }
+        else if (scaned_cur == 'JPY') {
+          num temp_cal = 1 / cur_rate[cur_name.indexOf(cur_list[index])] * price;
+          temp_price = temp_cal.toStringAsFixed(2);
+        }
+        return Container(
+          padding: EdgeInsets.fromLTRB(3,7, 3,7),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: color_list[index],
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Container(
+                  width: MediaQuery.of(context).size.width/6.5,
+                  padding: EdgeInsets.fromLTRB(10, 17, 10, 17),
+                  child: Center(
+                    child: Text(
+                      cur_list[index],
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Text(
+                temp_price + sym_list[index],
+              )
+            ],
+          ),
+        );
+      },
     );
   }
 }
