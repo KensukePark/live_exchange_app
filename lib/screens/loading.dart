@@ -20,7 +20,7 @@ class _LoadingState extends State<Loading> {
   String api_keys = '';
   late List<String> cur_list = [];
   late List<num> cur_rate = [];
-  var now = new DateTime.now().subtract(Duration(days:1));
+  var now = DateTime.now();
   String formatDate = '';
 
   @override
@@ -39,19 +39,17 @@ class _LoadingState extends State<Loading> {
   }
 
   void getprice() async {
-    int days = 1;
     Network network = Network('https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=' + api_keys + '&searchdate=' + formatDate + '&data=AP01');
     var Data = await network.getData();
+    //공휴일, 주말 감지 코드 아직 미완성?
     /*
-    if (Data[0]['result'] == 4) {
+    while (Data.length == 0) {
+      print(now);
+      now = now.subtract(Duration(days:1));
+      formatDate = DateFormat('yyyyMMdd').format(now);
+      network = Network('https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=' + api_keys + '&searchdate=' + formatDate + '&data=AP01');
+      Data = await network.getData();
       print(Data);
-      while (Data[0]['result'] == 4) {
-        now = now.subtract(Duration(days:days));
-        formatDate = DateFormat('yyyyMMdd').format(now);
-        network = Network('https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=' + api_keys + '&searchdate=' + formatDate + '&data=AP01');
-        Data = await network.getData();
-        print(Data);
-      }
     }
 
      */
