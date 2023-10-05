@@ -448,7 +448,7 @@ class Cur_price extends StatelessWidget {
           temp_price = temp_cal.toStringAsFixed(2);
         }
         else if (scaned_cur == 'JPY') {
-          num temp_cal = 1 / cur_rate[cur_name.indexOf(cur_list[index])] * price;
+          num temp_cal = cur_rate[cur_name.indexOf(scaned_cur)] * price / cur_rate[cur_name.indexOf(cur_list[index])];
           temp_price = temp_cal.toStringAsFixed(2);
         }
         return Container(

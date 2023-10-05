@@ -39,14 +39,24 @@ class _LoadingState extends State<Loading> {
   }
 
   void getprice() async {
+    int days = 1;
     Network network = Network('https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=' + api_keys + '&searchdate=' + formatDate + '&data=AP01');
     var Data = await network.getData();
-    //final prefs = await SharedPreferences.getInstance();
-    //prefs.clear(); //초기화시 사용
-    //key_temp = prefs.getKeys().toList();
-    //key_temp.sort();
-    //print(Data);
-    //print(Data[0]);
+    /*
+    if (Data[0]['result'] == 4) {
+      print(Data);
+      while (Data[0]['result'] == 4) {
+        now = now.subtract(Duration(days:days));
+        formatDate = DateFormat('yyyyMMdd').format(now);
+        network = Network('https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=' + api_keys + '&searchdate=' + formatDate + '&data=AP01');
+        Data = await network.getData();
+        print(Data);
+      }
+    }
+
+     */
+    print(Data);
+    print(formatDate);
     for (int i=0; i<Data.length; i++) {
       if (Data[i]['cur_unit'] == 'CNH') {
         cur_list.add('CNY');
@@ -69,9 +79,12 @@ class _LoadingState extends State<Loading> {
     }
     print(cur_list);
     print(cur_rate);
-    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context){
-      return HomePage(cur_name: cur_list, cur_rate: cur_rate,);
-    }), (route) => false);
+    //Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context){
+    //  return HomePage(cur_name: cur_list, cur_rate: cur_rate,);
+    //}), (route) => false);
+    showDialog(context: context, builder: (BuildContext context) {
+      return Container(child: Text('${days}'),);
+    });
   } // ...getprice()
 
   @override
