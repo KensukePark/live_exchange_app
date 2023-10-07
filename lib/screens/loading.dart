@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../network.dart';
@@ -26,6 +27,12 @@ class _LoadingState extends State<Loading> {
   @override
   void initState() {
     super.initState();
+    if (DateFormat('EEEE').format(now) == 'Saturday') {
+      now = now.subtract(Duration(days:1));
+    }
+    else if (DateFormat('EEEE').format(now) == 'Sunday') {
+      now = now.subtract(Duration(days:2));
+    }
     formatDate = DateFormat('yyyyMMdd').format(now);
     loadAsset(file_loc).then((value) {
       setState(() {
@@ -39,21 +46,21 @@ class _LoadingState extends State<Loading> {
   }
 
   void getprice() async {
+    int cnt = 0;
     Network network = Network('https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=' + api_keys + '&searchdate=' + formatDate + '&data=AP01');
     var Data = await network.getData();
-    //공휴일, 주말 감지 코드 아직 미완성?
-    /*
+    //if (Data.length == 0) print('data is null');
     while (Data.length == 0) {
-      print(now);
       now = now.subtract(Duration(days:1));
       formatDate = DateFormat('yyyyMMdd').format(now);
       network = Network('https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=' + api_keys + '&searchdate=' + formatDate + '&data=AP01');
       Data = await network.getData();
       print(Data);
+      cnt++;
+      if (cnt == 10) break;
     }
-     */
-    print(Data);
     print(formatDate);
+
     for (int i=0; i<Data.length; i++) {
       if (Data[i]['cur_unit'] == 'CNH') {
         cur_list.add('CNY');
@@ -76,10 +83,16 @@ class _LoadingState extends State<Loading> {
     }
     print(cur_list);
     print(cur_rate);
+
+
+    //Network network2 = Network('https://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo?serviceKey=m6Cg5VlEqDfsdhRJCcSCEkDGykaSqAXhMnc9Qi%2FVZ0w7bPZX9BdYi1xmlmCoRICGubwL4m6%2FE9lHw%2FkFlGCTHA%3D%3D&solYear=2023&solMonth=10');
+    //String Data2 = await network2.getXml();
+    //print(Data2.substring(0,20));
+
     Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context){
       return HomePage(cur_name: cur_list, cur_rate: cur_rate, date: formatDate);
     }), (route) => false);
-  } // ...getprice()
+  }
 
   @override
   Widget build(BuildContext context) {
