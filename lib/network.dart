@@ -16,4 +16,15 @@ class Network{
     }
   } // ...getJsonData()
 
+  Future<dynamic> getXml() async{
+    http.Response response = await http.get(Uri.parse(url));
+    if(response.statusCode == 200) {
+      var xmlData = response.bodyBytes;
+      var parsingData2 = utf8.decode(xmlData);
+      return parsingData2;
+    } else{
+      // 예외상황 처리
+    }
+  } // ...ge
+
 }
