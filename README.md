@@ -8,8 +8,8 @@ Dart 3.0.2 <br>
 
 # Preview
 <p align="left">
-<img src="exchange_app_01.jpg" width="216" height="528"/>
-<img src="exchange_app_02.jpg" width="216" height="528"/>
+<img src="currency_app_01.jpg" width="216" height="528"/>
+<img src="currency_app_02.jpg" width="216" height="528"/>
 </p>
 
 # Update
