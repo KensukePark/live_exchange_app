@@ -17,9 +17,13 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: '실시간 가격 환산 앱',
       home: Loading(),
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+      darkTheme: ThemeData(
+        appBarTheme: AppBarTheme(backgroundColor: Colors.cyan),
       ),
+      theme: ThemeData(
+        appBarTheme: AppBarTheme(backgroundColor: Colors.red),
+      ),
+      themeMode: ThemeMode.light,
     );
   }
 }
