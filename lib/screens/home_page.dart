@@ -24,12 +24,12 @@ class _HomePageState extends State<HomePage> {
   var now = new DateTime.now().subtract(Duration(days:1));
   String TargetDate = '';
   NumberFormat f = NumberFormat('#,###');
-  List<Color> color_list = [
-    Color(0xffffdddd),
-    Color(0xffffffdd),
-    Color(0xffddffdd),
-    Color(0xffddddff),
-  ];
+  Map<String, Color> color_list = {
+    'KRW': Color(0xffffdddd),
+    'USD': Color(0xffffffdd),
+    'CNY': Color(0xffddffdd),
+    'JPY': Color(0xffddddff),
+  };
   final StreamController<String> controller_stream = StreamController<String>.broadcast();
 
   void setText(value) {
@@ -46,18 +46,28 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    TargetDate = widget.date.substring(0,4) + '.' + widget.date.substring(4,6) + '.' + widget.date.substring(6) + ' 기준';
+    TargetDate = widget.date.substring(0,4) + '년 ' + widget.date.substring(4,6) + '월 ' + widget.date.substring(6) + '일 환율 기준';
   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.deepPurpleAccent,
-        title: Center(child: Text('실시간 환율 조회')),
+        iconTheme: IconThemeData(color: Colors.black),
+        backgroundColor: Color(0xffFEFAF8),
+        title: Center(
+          child: Text(
+            '실시간 환율 조회',
+            style: TextStyle(
+              color: Colors.black
+            ),
+          )
+        ),
         actions: [
           IconButton(
             onPressed: () {},
-            icon: Icon(Icons.autorenew_rounded),
+            icon: Icon(
+              Icons.autorenew_rounded,
+            ),
           ),
         ],
       ),
@@ -105,12 +115,13 @@ class _HomePageState extends State<HomePage> {
       ),
       bottomNavigationBar: BottomAppBar(
         shape: CircularNotchedRectangle(),
-        color: Colors.deepPurpleAccent,
+        color: Color(0xffFEFAF8),
         child: Row(
           children: <Widget>[
             IconButton(
                 icon: Icon(Icons.sort_by_alpha,
-                  color: Colors.white,),
+                  color: Colors.black,
+                ),
                 onPressed: () {
                 }),
           ],
@@ -119,11 +130,12 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(
         child: Icon(
           Icons.add,
+          color: Colors.black,
         ),
         onPressed: () {
           null;
         },
-        backgroundColor: Colors.deepPurpleAccent,
+        backgroundColor: Color(0xffFEFAF8),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: SafeArea(
@@ -389,7 +401,7 @@ class Cur_price extends StatelessWidget {
   final List<String> cur_list;
   final String scaned_cur;
   final num price;
-  final List<Color> color_list;
+  final Map<String, Color> color_list;
   final List<String> sym_list;
   @override
   Widget build(BuildContext context) {
@@ -415,7 +427,7 @@ class Cur_price extends StatelessWidget {
             children: [
               Container(
                 decoration: BoxDecoration(
-                  color: color_list[index],
+                  color: color_list[cur_list[index]],
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Container(
