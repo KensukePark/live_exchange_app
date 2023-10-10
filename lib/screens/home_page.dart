@@ -177,9 +177,10 @@ class _HomePageState extends State<HomePage> {
                       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
                         bool _check = false;
                         //인식 결과가 있다면 체크 시작.
+                        //List remove 방식의 처리에서 버그 발견, 방식을 변경하였음
+                        //2023.10.10
                         if (snapshot.data != null) {
                           String temp = '';
-                          //List remove 방식의 처리에서 버그 발견, 방식을 변경하였음 2023.10.10
                           //달러 기호 감지
                           if (snapshot.data!.contains(r'$')) {
                             scaned_cur = 'USD';
