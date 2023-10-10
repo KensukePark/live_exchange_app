@@ -8,8 +8,9 @@ Dart 3.0.2 <br>
 
 # Preview
 <p align="left">
-<img src="currency_app_01.jpg" width="216" height="528"/>
-<img src="currency_app_02.jpg" width="216" height="528"/>
+<img src="live_currency_usd.jpg" width="216" height="528"/>
+<img src="live_currency_jpy.jpg" width="216" height="528"/>
+<img src="live_currency_krw.jpg" width="216" height="528"/>
 </p>
 
 # Update

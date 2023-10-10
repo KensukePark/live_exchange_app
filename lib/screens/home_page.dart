@@ -424,11 +424,17 @@ class Cur_price extends StatelessWidget {
         String temp_price = '';
         if (scaned_cur == 'KRW') {
           num temp_cal = price / cur_rate[cur_name.indexOf(cur_list[index])];
-          temp_price = temp_cal.toStringAsFixed(2);
+          if (sym_list[index] == '달러') {
+            temp_price = f.format(int.parse(temp_cal.toStringAsFixed(0))) + temp_cal.toStringAsFixed(2).substring(temp_cal.toStringAsFixed(2).length-3);
+          }
+          else temp_price = f.format(int.parse(temp_cal.toStringAsFixed(0)));
         }
         else if (scaned_cur == 'JPY' || scaned_cur == 'USD' || scaned_cur == 'CNY') {
           num temp_cal = cur_rate[cur_name.indexOf(scaned_cur)] * price / cur_rate[cur_name.indexOf(cur_list[index])];
-          temp_price = temp_cal.toStringAsFixed(2);
+          if (sym_list[index] == '달러') {
+            temp_price = f.format(int.parse(temp_cal.toStringAsFixed(0))) + temp_cal.toStringAsFixed(2).substring(temp_cal.toStringAsFixed(2).length-3);
+          }
+          else temp_price = f.format(int.parse(temp_cal.toStringAsFixed(0)));
         }
         return Container(
           padding: EdgeInsets.fromLTRB(3,7, 3,7),
@@ -454,7 +460,7 @@ class Cur_price extends StatelessWidget {
                 ),
               ),
               Text(
-                temp_price + sym_list[index],
+                temp_price + ' ' + sym_list[index],
               )
             ],
           ),
