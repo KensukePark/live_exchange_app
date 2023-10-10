@@ -81,7 +81,7 @@ class _HomePageState extends State<HomePage> {
                   Icons.home,
                   color: Colors.grey[850],
                 ),
-                title: Text('Home'),
+                title: Text('월급 계산'),
                 onTap: () {
                   print('Home is clicked');
                 },
@@ -92,7 +92,7 @@ class _HomePageState extends State<HomePage> {
                   Icons.settings,
                   color: Colors.grey[850],
                 ),
-                title: Text('Setting'),
+                title: Text('가격 비교'),
                 onTap: () {
                   print('Setting is clicked');
                 },
@@ -103,7 +103,7 @@ class _HomePageState extends State<HomePage> {
                   Icons.question_answer,
                   color: Colors.grey[850],
                 ),
-                title: Text('Q&A'),
+                title: Text('레시피'),
                 onTap: () {
                   print('Q&A is clicked');
                 },
@@ -179,33 +179,42 @@ class _HomePageState extends State<HomePage> {
                         //인식 결과가 있다면 체크 시작.
                         if (snapshot.data != null) {
                           String temp = '';
+                          //List remove 방식의 처리에서 버그 발견, 방식을 변경하였음 2023.10.10
                           //달러 기호 감지
                           if (snapshot.data!.contains(r'$')) {
                             scaned_cur = 'USD';
                             symbol = '달러';
-                            cur_list.remove('USD');
-                            sym_list.remove('달러');
+                            //cur_list.remove('USD');
+                            //sym_list.remove('달러');
+                            cur_list = ['KRW', 'CNY', 'JPY'];
+                            sym_list = ['원', '위안' , '엔'];
                           }
                           //엔 한자, 엔 기호 감지
                           else if (snapshot.data!.contains('円') || snapshot.data!.contains('¥')) {
                             scaned_cur = 'JPY';
                             symbol = '엔';
-                            cur_list.remove('JPY');
-                            sym_list.remove('엔');
+                            //cur_list.remove('JPY');
+                            //sym_list.remove('엔');
+                            cur_list = ['KRW', 'USD', 'CNY'];
+                            sym_list = ['원', '달러', '위안'];
                           }
                           //위안 한자, 위안 기호 감지
                           else if (snapshot.data!.contains('元') || snapshot.data!.contains('¥')) {
                             scaned_cur = 'CNY';
                             symbol = '위안';
-                            cur_list.remove('CNY');
-                            sym_list.remove('위안');
+                            //cur_list.remove('CNY');
+                            //sym_list.remove('위안');
+                            cur_list = ['KRW', 'USD', 'JPY'];
+                            sym_list = ['원', '달러', '엔'];
                           }
                           //원, 원기호 감지
                           else if (snapshot.data!.contains('원') || snapshot.data!.contains('w')  || snapshot.data!.contains('￦') || snapshot.data!.contains('₩')) {
                             scaned_cur = 'KRW';
                             symbol = '원';
-                            cur_list.remove('KRW');
-                            sym_list.remove('원');
+                            //cur_list.remove('KRW');
+                            //sym_list.remove('원');
+                            cur_list = ['USD', 'CNY', 'JPY'];
+                            sym_list = ['달러', '위안' , '엔'];
                           }
 
                           //통화 감지를 못했을 경우 일단 unknown 처리
@@ -416,7 +425,7 @@ class Cur_price extends StatelessWidget {
           num temp_cal = price / cur_rate[cur_name.indexOf(cur_list[index])];
           temp_price = temp_cal.toStringAsFixed(2);
         }
-        else if (scaned_cur == 'JPY') {
+        else if (scaned_cur == 'JPY' || scaned_cur == 'USD' || scaned_cur == 'CNY') {
           num temp_cal = cur_rate[cur_name.indexOf(scaned_cur)] * price / cur_rate[cur_name.indexOf(cur_list[index])];
           temp_price = temp_cal.toStringAsFixed(2);
         }
