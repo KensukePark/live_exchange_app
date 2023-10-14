@@ -43,7 +43,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
-    controller_stream.close();
     super.dispose();
   }
 
@@ -84,7 +83,11 @@ class _HomePageState extends State<HomePage> {
             padding: EdgeInsets.zero,
             children: [
               ListTile(
-                leading: CupertinoSwitch(
+                leading: Icon(
+                  Icons.cloud_off
+                ),
+                title: Text('오프라인 모드'),
+                trailing: Switch(
                   value: check_type,
                   activeColor: CupertinoColors.activeBlue,
                   onChanged: (bool value) async {
@@ -98,7 +101,6 @@ class _HomePageState extends State<HomePage> {
                     }), (route) => false);
                   },
                 ),
-                title: Text('오프라인 모드'),
               )
             ],
           ),
