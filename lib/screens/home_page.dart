@@ -1,14 +1,18 @@
 import 'dart:async';
 import 'dart:developer';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_scalable_ocr/flutter_scalable_ocr.dart';
 import 'package:intl/intl.dart';
+import 'package:live_currency_rate_app/screens/loading.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key, required this.cur_name, required this.cur_rate, required this.date}) : super(key: key);
+  const HomePage({Key? key, required this.cur_name, required this.cur_rate, required this.date, required this.check}) : super(key: key);
   final List<String> cur_name;
   final List<num> cur_rate;
   final String date;
+  final bool check;
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -24,6 +28,7 @@ class _HomePageState extends State<HomePage> {
   var now = new DateTime.now().subtract(Duration(days:1));
   String TargetDate = '';
   NumberFormat f = NumberFormat('#,###');
+  late bool check_type;
   Map<String, Color> color_list = {
     'KRW': Color(0xffffdddd),
     'USD': Color(0xffffffdd),
@@ -47,6 +52,8 @@ class _HomePageState extends State<HomePage> {
     // TODO: implement initState
     super.initState();
     TargetDate = widget.date.substring(0,4) + '년 ' + widget.date.substring(4,6) + '월 ' + widget.date.substring(6) + '일 환율 기준';
+    check_type = widget.check;
+    print(check_type);
   }
   @override
   Widget build(BuildContext context) {
@@ -109,6 +116,23 @@ class _HomePageState extends State<HomePage> {
                 },
                 trailing: Icon(Icons.add),
               ),
+              ListTile(
+                leading: CupertinoSwitch(
+                  value: check_type,
+                  activeColor: CupertinoColors.activeBlue,
+                  onChanged: (bool value) async {
+                    setState(() {
+                      check_type = value;
+                    });
+                    var prefs = await SharedPreferences.getInstance();
+                    prefs.setBool('bool', value);
+                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context){
+                      return Loading();
+                    }), (route) => false);
+                  },
+                ),
+                title: Text('오프라인 모드'),
+              )
             ],
           ),
         ),

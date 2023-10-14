@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../network.dart';
@@ -23,8 +22,24 @@ class _LoadingState extends State<Loading> {
   late List<num> cur_rate = [];
   var now = DateTime.now();
   String formatDate = '';
+  late bool check;
 
   @override
+  void check_bool() async {
+    var prefs = await SharedPreferences.getInstance();
+    if (prefs.containsKey('bool') == false) {
+      prefs.setBool('bool', false);
+    }
+    if (prefs.getBool('bool') == false) {
+      getprice();
+      check = false;
+    }
+    else {
+      getprice_offline();
+      check = true;
+    }
+  }
+
   void initState() {
     super.initState();
     if (DateFormat('EEEE').format(now) == 'Saturday') {
@@ -38,11 +53,31 @@ class _LoadingState extends State<Loading> {
       setState(() {
         api_keys = value;
       });
-      getprice();
+      check_bool();
     });
   }
   Future<String> loadAsset(String path) async {
     return await rootBundle.loadString(path);
+  }
+
+  /*
+  오프라인에서 환율 테스트용 함수
+   */
+  void getprice_offline() {
+    cur_list.add('KRW');
+    cur_rate.add(1);
+    cur_list.add('CNY');
+    cur_rate.add(184);
+    cur_list.add('USD');
+    cur_rate.add(1170);
+    cur_list.add('JPY');
+    cur_rate.add(9.5);
+    print('***오프라인***');
+    print(cur_list);
+    print(cur_rate);
+    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context){
+      return HomePage(cur_name: cur_list, cur_rate: cur_rate, date: formatDate, check: check,);
+    }), (route) => false);
   }
 
   void getprice() async {
@@ -90,7 +125,7 @@ class _LoadingState extends State<Loading> {
     //print(Data2.substring(0,20));
 
     Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context){
-      return HomePage(cur_name: cur_list, cur_rate: cur_rate, date: formatDate);
+      return HomePage(cur_name: cur_list, cur_rate: cur_rate, date: formatDate, check: check,);
     }), (route) => false);
   }
 
