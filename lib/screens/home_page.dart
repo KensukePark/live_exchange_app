@@ -84,39 +84,6 @@ class _HomePageState extends State<HomePage> {
             padding: EdgeInsets.zero,
             children: [
               ListTile(
-                leading: Icon(
-                  Icons.home,
-                  color: Colors.grey[850],
-                ),
-                title: Text('월급 계산'),
-                onTap: () {
-                  print('Home is clicked');
-                },
-                trailing: Icon(Icons.add),
-              ),
-              ListTile(
-                leading: Icon(
-                  Icons.settings,
-                  color: Colors.grey[850],
-                ),
-                title: Text('가격 비교'),
-                onTap: () {
-                  print('Setting is clicked');
-                },
-                trailing: Icon(Icons.add),
-              ),
-              ListTile(
-                leading: Icon(
-                  Icons.question_answer,
-                  color: Colors.grey[850],
-                ),
-                title: Text('레시피'),
-                onTap: () {
-                  print('Q&A is clicked');
-                },
-                trailing: Icon(Icons.add),
-              ),
-              ListTile(
                 leading: CupertinoSwitch(
                   value: check_type,
                   activeColor: CupertinoColors.activeBlue,
