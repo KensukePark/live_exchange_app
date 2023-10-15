@@ -78,32 +78,56 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       drawer: Drawer(
-        child: SafeArea(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: [
-              ListTile(
-                leading: Icon(
-                  Icons.cloud_off
+        child: Column(
+          children: [
+            ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                ListTile(
+                  leading: Icon(
+                    Icons.currency_exchange,
+                    size: 32,
+                  ),
+                  title: Text(
+                    '현재 환율',
+                    style: TextStyle(
+                        fontSize: 16
+                    ),
+                  ),
+                  minLeadingWidth : 10,
                 ),
-                title: Text('오프라인 모드'),
-                trailing: Switch(
-                  value: check_type,
-                  activeColor: CupertinoColors.activeBlue,
-                  onChanged: (bool value) async {
-                    setState(() {
-                      check_type = value;
-                    });
-                    var prefs = await SharedPreferences.getInstance();
-                    prefs.setBool('bool', value);
-                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context){
-                      return Loading();
-                    }), (route) => false);
-                  },
-                ),
-              )
-            ],
-          ),
+                ListTile(
+                  leading: Icon(
+                      Icons.cloud_off,
+                      size: 32
+                  ),
+                  title: Text(
+                    '오프라인 모드',
+                    style: TextStyle(
+                        fontSize: 16
+                    ),
+                  ),
+                  trailing: Switch(
+                    value: check_type,
+                    activeColor: CupertinoColors.activeBlue,
+                    onChanged: (bool value) async {
+                      setState(() {
+                        check_type = value;
+                      });
+                      var prefs = await SharedPreferences.getInstance();
+                      prefs.setBool('bool', value);
+                      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context){
+                        return Loading();
+                      }), (route) => false);
+                    },
+                  ),
+                  minLeadingWidth : 10,
+                )
+              ],
+            ),
+            Expanded(
+                child: child)
+          ]
         ),
       ),
       bottomNavigationBar: BottomAppBar(
