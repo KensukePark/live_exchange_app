@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_scalable_ocr/flutter_scalable_ocr.dart';
 import 'package:intl/intl.dart';
 import 'package:live_currency_rate_app/screens/loading.dart';
+import 'package:live_currency_rate_app/screens/setting_page_OnOff.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
@@ -78,56 +79,105 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       drawer: Drawer(
-        child: Column(
-          children: [
-            ListView(
-              padding: EdgeInsets.zero,
-              children: [
-                ListTile(
-                  leading: Icon(
-                    Icons.currency_exchange,
-                    size: 32,
+        child: SafeArea(
+          child: Column(
+            children: [
+              InkWell(
+                child: Container(
+                  padding: EdgeInsets.all(15),
+                  height: MediaQuery.of(context).size.height / 16,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.currency_exchange,
+                        size: 24,
+                      ),
+                      SizedBox(width: 10,),
+                      Text(
+                        '현재 환율',
+                        style: TextStyle(
+                            fontSize: 16
+                        ),
+                      ),
+                    ],
                   ),
-                  title: Text(
-                    '현재 환율',
-                    style: TextStyle(
-                        fontSize: 16
-                    ),
-                  ),
-                  minLeadingWidth : 10,
                 ),
-                ListTile(
-                  leading: Icon(
-                      Icons.cloud_off,
-                      size: 32
+                onTap: () {
+                  print('hello');
+                }
+              ),
+              InkWell(
+                child: Container(
+                  padding: EdgeInsets.all(15),
+                  height: MediaQuery.of(context).size.height / 16,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.cloud_off,
+                        size: 24,
+                      ),
+                      SizedBox(width: 10,),
+                      Text(
+                        '오프라인 모드',
+                        style: TextStyle(
+                            fontSize: 16
+                        ),
+                      ),
+                    ],
                   ),
-                  title: Text(
-                    '오프라인 모드',
-                    style: TextStyle(
-                        fontSize: 16
+                ),
+                onTap: () {
+                  print('hello');
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => OnOffPage()));
+                }
+              ),
+              /*
+              ListTile(
+                leading: Icon(
+                    Icons.cloud_off,
+                    size: 24,
+                ),
+                title: Text(
+                  '오프라인 모드',
+                  style: TextStyle(
+                      fontSize: 16
+                  ),
+                ),
+                trailing: Switch(
+                  value: check_type,
+                  activeColor: CupertinoColors.activeBlue,
+                  onChanged: (bool value) async {
+                    setState(() {
+                      check_type = value;
+                    });
+                    var prefs = await SharedPreferences.getInstance();
+                    prefs.setBool('bool', value);
+                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context){
+                      return Loading();
+                    }), (route) => false);
+                  },
+                ),
+                minLeadingWidth : 5,
+              ),
+               */
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.all(15),
+                  child: Align(
+                    alignment: Alignment.bottomRight,
+                    child: Text(
+                      '실시간 환율 어플 - KensukePark',
+                      style: TextStyle(
+                          color: Colors.grey
+                      ),
                     ),
                   ),
-                  trailing: Switch(
-                    value: check_type,
-                    activeColor: CupertinoColors.activeBlue,
-                    onChanged: (bool value) async {
-                      setState(() {
-                        check_type = value;
-                      });
-                      var prefs = await SharedPreferences.getInstance();
-                      prefs.setBool('bool', value);
-                      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context){
-                        return Loading();
-                      }), (route) => false);
-                    },
-                  ),
-                  minLeadingWidth : 10,
                 )
-              ],
-            ),
-            Expanded(
-                child: child)
-          ]
+              ),
+            ]
+          ),
         ),
       ),
       bottomNavigationBar: BottomAppBar(

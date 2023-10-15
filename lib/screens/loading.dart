@@ -6,8 +6,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../network.dart';
 import '../screens/home_page.dart';
 
-
-
 class Loading extends StatefulWidget {
   const Loading({Key? key}) : super(key: key);
 
@@ -56,6 +54,7 @@ class _LoadingState extends State<Loading> {
       check_bool();
     });
   }
+
   Future<String> loadAsset(String path) async {
     return await rootBundle.loadString(path);
   }
@@ -94,7 +93,6 @@ class _LoadingState extends State<Loading> {
       cnt++;
       if (cnt == 10) break;
     }
-    print(formatDate);
 
     for (int i=0; i<Data.length; i++) {
       if (Data[i]['cur_unit'] == 'CNH') {
@@ -118,11 +116,6 @@ class _LoadingState extends State<Loading> {
     }
     print(cur_list);
     print(cur_rate);
-
-
-    //Network network2 = Network('https://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo?serviceKey=m6Cg5VlEqDfsdhRJCcSCEkDGykaSqAXhMnc9Qi%2FVZ0w7bPZX9BdYi1xmlmCoRICGubwL4m6%2FE9lHw%2FkFlGCTHA%3D%3D&solYear=2023&solMonth=10');
-    //String Data2 = await network2.getXml();
-    //print(Data2.substring(0,20));
 
     Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context){
       return HomePage(cur_name: cur_list, cur_rate: cur_rate, date: formatDate, check: check,);
