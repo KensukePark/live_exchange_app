@@ -5,15 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_scalable_ocr/flutter_scalable_ocr.dart';
 import 'package:intl/intl.dart';
 import 'package:live_currency_rate_app/screens/loading.dart';
+import 'package:live_currency_rate_app/screens/rate_page.dart';
 import 'package:live_currency_rate_app/screens/setting_page_OnOff.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key, required this.cur_name, required this.cur_rate, required this.date, required this.check}) : super(key: key);
+  const HomePage({Key? key, required this.cur_name, required this.cur_rate, required this.date, required this.check, required this.mode_check}) : super(key: key);
   final List<String> cur_name;
   final List<num> cur_rate;
   final String date;
   final bool check;
+  final bool mode_check;
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -51,7 +53,17 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    TargetDate = widget.date.substring(0,4) + '년 ' + widget.date.substring(4,6) + '월 ' + widget.date.substring(6) + '일 환율 기준';
+    if (widget.check == false) {
+      TargetDate = widget.date.substring(0,4) + '년 ' + widget.date.substring(4,6) + '월 ' + widget.date.substring(6) + '일 환율 기준';
+    }
+    else {
+      if (widget.mode_check == false) {
+        TargetDate = '프로그램 제공 환율 기준';
+      }
+      else {
+        TargetDate = '사용자 지정 환율 기준';
+      }
+    }
     check_type = widget.check;
     print(check_type);
   }
@@ -84,7 +96,7 @@ class _HomePageState extends State<HomePage> {
             children: [
               InkWell(
                 child: Container(
-                  padding: EdgeInsets.all(15),
+                  padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
                   height: MediaQuery.of(context).size.height / 16,
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -105,11 +117,12 @@ class _HomePageState extends State<HomePage> {
                 ),
                 onTap: () {
                   print('hello');
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => RatePage()));
                 }
               ),
               InkWell(
                 child: Container(
-                  padding: EdgeInsets.all(15),
+                  padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
                   height: MediaQuery.of(context).size.height / 16,
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -128,9 +141,12 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
-                onTap: () {
-                  print('hello');
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => OnOffPage()));
+                onTap: () async {
+                  var prefs = await SharedPreferences.getInstance();
+                  List<String> temp_rate = prefs.getStringList('user_rate')!;
+                  List<num> user_rate = [];
+                  temp_rate.forEach((element) {user_rate.add(num.parse(element));});
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => OnOffPage(check: check_type,check_custom: widget.mode_check,user_rate: user_rate)));
                 }
               ),
               /*
