@@ -19,9 +19,11 @@ class MyApp extends StatelessWidget {
       home: Loading(),
       darkTheme: ThemeData(
         appBarTheme: AppBarTheme(backgroundColor: Colors.cyan),
+        fontFamily: 'title',
       ),
       theme: ThemeData(
         appBarTheme: AppBarTheme(backgroundColor: Colors.red),
+        fontFamily: 'title',
       ),
       themeMode: ThemeMode.light,
     );
