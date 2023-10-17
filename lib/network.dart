@@ -12,7 +12,9 @@ class Network{
       var parsingData = jsonDecode(jsonData);
       return parsingData;
     } else{
-      // 예외상황 처리
+      print('예외상황');
+      print('예외상황');
+      print('예외상황');
     }
   } // ...getJsonData()
 
