@@ -10,6 +10,18 @@ class RatePage extends StatefulWidget {
 class _RatePageState extends State<RatePage> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.black),
+        title: Text(
+          '현재 환율',
+          style: TextStyle(
+              color: Colors.black
+          ),
+        ),
+        backgroundColor: Color(0xffFEFAF8),
+        centerTitle: true,
+      ),
+    );
   }
 }
