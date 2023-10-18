@@ -19,6 +19,17 @@ Dart 3.0.2 <br>
   실시간 카메라 감지 구현 <br>
   최신 환율 연동 <br>
 
+* 2023_10_17 <br>
+  오프라인 모드 추가 <br>
+  네트워크 상태 확인 추가 <br>
+  사용자 설정 환율 모드 추가 <br>
+<p align="left">
+<img src="live_currency_error.png" width="216" height="528"/>
+<img src="live_currency_drawer.jpg" width="216" height="528"/>
+<img src="live_currency_user.jpg" width="216" height="528"/>
+</p>
+  
+
 * 2023_10_06 <br>
   타 통화로 환전된 가격 안내 추가 <br>
   텍스트 처리 관련 버그 픽스 <br>
