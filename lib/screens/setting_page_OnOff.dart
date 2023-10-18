@@ -49,7 +49,6 @@ class _OnOffPageState extends State<OnOffPage> {
             }), (route) => false);
           },
           icon: Icon(Icons.arrow_back),
-
         ),
       ),
       body: Container(
