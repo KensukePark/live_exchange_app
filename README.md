@@ -25,8 +25,8 @@ Dart 3.0.2 <br>
   사용자 설정 환율 모드 추가 <br>
 <p align="left">
 <img src="live_currency_error.png" width="216" height="528"/>
-<img src="live_currency_drawer.jpg" width="216" height="528"/>
-<img src="live_currency_user.jpg" width="216" height="528"/>
+<img src="live_currency_drawer.png" width="216" height="528"/>
+<img src="live_currency_user.png" width="216" height="528"/>
 </p>
   
 
