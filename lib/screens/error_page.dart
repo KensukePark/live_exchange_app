@@ -16,6 +16,8 @@ class _ErrorPageState extends State<ErrorPage> {
       body: SafeArea(
         child: Container(
           decoration: BoxDecoration(
+            color: Color(0xffFEFAF8),
+            /*
             image: DecorationImage(
               fit: BoxFit.cover,
               image: AssetImage('assets/images/chunsik_bg_3.jpg'), // 배경 이미지
@@ -24,6 +26,7 @@ class _ErrorPageState extends State<ErrorPage> {
                   BlendMode.dstATop
               ),
             ),
+             */
           ),
           child: Center(
             child: Column(
@@ -59,6 +62,8 @@ class _ErrorPageState extends State<ErrorPage> {
                 ),
                 SizedBox(height: 15,),
                 ElevatedButton(
+                  style: ButtonStyle(
+                  ),
                   onPressed: () async {
                     var prefs = await SharedPreferences.getInstance();
                     prefs.setBool('bool', true);
