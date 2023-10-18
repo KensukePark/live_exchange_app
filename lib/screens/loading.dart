@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:intl/intl.dart';
+import 'package:live_currency_rate_app/screens/error_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../network.dart';
 import '../screens/home_page.dart';
@@ -109,51 +111,60 @@ class _LoadingState extends State<Loading> {
   실시간으로 최신 환율 데이터값을 받아와 사용
    */
   void getprice() async {
-    int cnt = 0;
-    Network network = Network('https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=' + api_keys + '&searchdate=' + formatDate + '&data=AP01');
-    var Data = await network.getData();
-    print('getData 이후 확인');
-    //if (Data.length == 0) print('data is null');
-    while (Data.length == 0) {
-      print('while 문 확인');
-      now = now.subtract(Duration(days:1));
-      formatDate = DateFormat('yyyyMMdd').format(now);
-      network = Network('https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=' + api_keys + '&searchdate=' + formatDate + '&data=AP01');
-      Data = await network.getData();
-      print(Data);
-      cnt++;
-      if (cnt == 10) break;
+    bool check_connect = await InternetConnectionChecker().hasConnection;
+    if (check_connect == true) {
+      int cnt = 0;
+      Network network = Network('https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=' + api_keys + '&searchdate=' + formatDate + '&data=AP01');
+      var Data = await network.getData();
+      print('getData 이후 확인');
+      //if (Data.length == 0) print('data is null');
+      while (Data.length == 0) {
+        print('while 문 확인');
+        now = now.subtract(Duration(days:1));
+        formatDate = DateFormat('yyyyMMdd').format(now);
+        network = Network('https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=' + api_keys + '&searchdate=' + formatDate + '&data=AP01');
+        Data = await network.getData();
+        print(Data);
+        cnt++;
+        if (cnt == 10) break;
+      }
+      if (Data.length == 0) {
+        print('인터넷 연결 오류');
+        print('인터넷 연결 오류');
+        print('인터넷 연결 오류');
+      }
+      for (int i=0; i<Data.length; i++) {
+        if (Data[i]['cur_unit'] == 'CNH') {
+          cur_list.add('CNY');
+          cur_rate.add(num.parse(Data[i]['deal_bas_r']));
+        }
+        else if (Data[i]['cur_unit'] == 'JPY(100)') {
+          cur_list.add('JPY');
+          String temp = Data[i]['deal_bas_r'];
+          cur_rate.add(num.parse(temp.replaceAll(',', ''))/100);
+        }
+        else if (Data[i]['cur_unit'] == 'KRW') {
+          cur_list.add('KRW');
+          cur_rate.add(1);
+        }
+        else if (Data[i]['cur_unit'] == 'USD') {
+          cur_list.add('USD');
+          String temp = Data[i]['deal_bas_r'];
+          cur_rate.add(num.parse(temp.replaceAll(',', '')));
+        }
+      }
+      print(cur_list);
+      print(cur_rate);
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context){
+        return HomePage(cur_name: cur_list, cur_rate: cur_rate, date: formatDate, check: check, mode_check: check_custom);
+      }), (route) => false);
     }
-    if (Data.length == 0) {
-      print('인터넷 연결 오류');
-      print('인터넷 연결 오류');
-      print('인터넷 연결 오류');
+    else {
+      print('인터넷 연결 없음');
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context){
+        return ErrorPage();
+      }), (route) => false);
     }
-    for (int i=0; i<Data.length; i++) {
-      if (Data[i]['cur_unit'] == 'CNH') {
-        cur_list.add('CNY');
-        cur_rate.add(num.parse(Data[i]['deal_bas_r']));
-      }
-      else if (Data[i]['cur_unit'] == 'JPY(100)') {
-        cur_list.add('JPY');
-        String temp = Data[i]['deal_bas_r'];
-        cur_rate.add(num.parse(temp.replaceAll(',', ''))/100);
-      }
-      else if (Data[i]['cur_unit'] == 'KRW') {
-        cur_list.add('KRW');
-        cur_rate.add(1);
-      }
-      else if (Data[i]['cur_unit'] == 'USD') {
-        cur_list.add('USD');
-        String temp = Data[i]['deal_bas_r'];
-        cur_rate.add(num.parse(temp.replaceAll(',', '')));
-      }
-    }
-    print(cur_list);
-    print(cur_rate);
-    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context){
-      return HomePage(cur_name: cur_list, cur_rate: cur_rate, date: formatDate, check: check, mode_check: check_custom);
-    }), (route) => false);
   }
 
   @override
