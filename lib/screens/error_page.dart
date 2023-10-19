@@ -33,7 +33,7 @@ class _ErrorPageState extends State<ErrorPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
-                  Icons.portable_wifi_off_sharp,
+                  Icons.error_outline,
                   color: Colors.grey,
                   size: 80,
                 ),
