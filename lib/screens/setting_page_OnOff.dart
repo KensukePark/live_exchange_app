@@ -130,7 +130,7 @@ class _OnOffPageState extends State<OnOffPage> {
                 },
               ),
               SizedBox(height: 5,),
-
+              check_type == true ?
               InkWell(
                 child: Container(
                   height: 50,
@@ -165,6 +165,21 @@ class _OnOffPageState extends State<OnOffPage> {
                   var prefs = await SharedPreferences.getInstance();
                   prefs.setBool('custom_mode', check_custom);
                 },
+              ) :
+              Container(
+                height: 50,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '수동 환율 설정',
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: check_type == false ? Colors.grey : Colors.black
+                      ),
+                    ),
+                  ]
+                )
               ),
               SizedBox(height: 15),
               check_custom == true ? Container(
