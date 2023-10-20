@@ -3,15 +3,10 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_scalable_ocr/flutter_scalable_ocr.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:intl/intl.dart';
-import 'package:live_currency_rate_app/screens/error_page_2.dart';
-import 'package:live_currency_rate_app/screens/loading.dart';
-import 'package:live_currency_rate_app/screens/rate_page.dart';
+import 'package:live_currency_rate_app/screens/check_page.dart';
 import 'package:live_currency_rate_app/screens/setting_page_OnOff.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'error_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.cur_name, required this.cur_rate, required this.date, required this.check, required this.mode_check}) : super(key: key);
@@ -119,16 +114,8 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
-                onTap: () async {
-                  bool check_connect = await InternetConnectionChecker().hasConnection;
-                  if (check_connect == false) {
-                    print('인터넷 연결 없음');
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => ErrorPageTwo()));
-                  }
-                  else {
-                    print('hello');
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => RatePage()));
-                  }
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => CheckPage()));
                 }
               ),
               InkWell(
@@ -427,8 +414,6 @@ class Result extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    NumberFormat f = NumberFormat('#,###');
     return Column(
       children: [
         //스캔 결과 박스
