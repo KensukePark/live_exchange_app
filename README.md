@@ -37,7 +37,7 @@ Dart 3.0.2 <br>
   현재 환율 조회 추가 <br>
   네트워크 상태 확인 v2 추가 <br>
 <p align="left">
-<img src="live_currency_search.png" width="216" height="528"/>
+<img src="Screenshot_20231020_233909.png" width="216" height="528"/>
 <img src="live_currency_error_2.png" width="216" height="528"/>
 </p>
   
