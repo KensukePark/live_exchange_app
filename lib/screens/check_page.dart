@@ -1,7 +1,3 @@
-/*
-CheckPage 는 웹 크롤링 기능을 테스트 하기 위한 페이지.
-실제 앱 구동과 연관이 없음.
- */
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
