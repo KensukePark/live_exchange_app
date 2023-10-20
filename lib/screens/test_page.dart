@@ -1,3 +1,8 @@
+/*
+TestPage 는 웹 크롤링 기능을 테스트 하기 위한 페이지.
+실제 앱 구동과 연관이 없음.
+ */
+
 import 'package:flutter/material.dart';
 import 'package:html/parser.dart';
 import 'package:http/http.dart' as http;
