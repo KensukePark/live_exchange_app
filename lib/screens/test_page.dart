@@ -23,6 +23,22 @@ class _TestPageState extends State<TestPage> {
       "Access-Control_Allow_Origin": "*"
     });
     var document = parse(response.body);
+    print(document.getElementsByClassName('list_item')[1].text);
+    for (int i=0; i<5; i++) {
+      print(response.body.substring(1000*i,1000*(i+1)));
+    }
+    print('***');
+    var ul = document
+        ?.querySelectorAll('section[class="sc_new cs_nexchangerate"]');
+    print(ul);
+
+    print('***');
+    var ul2 = document
+        ?.querySelectorAll('ul[class="list_item"]');
+    print(ul2?[0].text);
+    print(ul2?[1].text);
+
+    print('***');
     var li = document
         ?.querySelectorAll('li[class="csp"]');
     var li_d = document
@@ -46,6 +62,7 @@ class _TestPageState extends State<TestPage> {
     //환율 업데이트 날자를 불러오는 코드
     var date = document?.querySelector('span[class="update_info"]');
     print(date?.text);
+    print(date!.text.split(' ')[0].toString().substring(0,date!.text.split(' ')[0].toString().length-1) + ' ' + date!.text.split(' ')[1].toString());
     //업데이트 날자 end
 
     //환율 정보를 불러오는 코드
@@ -63,9 +80,7 @@ class _TestPageState extends State<TestPage> {
           temp = temp + li[n].text[i].toString();
         }
       }
-    }
-    for (int n=0; n<3; n++) {
-      var temp = '';
+      temp = '';
       for (int i=0; i<li_d![n].text.length; i++) {
         if (li_d[n].text[i] == ' ') {
           if (temp != '') {

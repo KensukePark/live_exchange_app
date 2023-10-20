@@ -26,6 +26,7 @@ class _LoadingState extends State<Loading> {
   late bool check_custom;
   late List<String> temp_list;
   @override
+
   /*
   check_bool 함수:
   로컬 스토리지에 저장된 bool값들을 체크하는 함수
@@ -54,22 +55,9 @@ class _LoadingState extends State<Loading> {
     }
   }
 
-  void initState() {
-    super.initState();
-    if (DateFormat('EEEE').format(now) == 'Saturday') {
-      now = now.subtract(Duration(days:1));
-    }
-    else if (DateFormat('EEEE').format(now) == 'Sunday') {
-      now = now.subtract(Duration(days:2));
-    }
-    formatDate = DateFormat('yyyyMMdd').format(now);
-    loadAsset(file_loc).then((value) {
-      setState(() {
-        api_keys = value;
-      });
-      check_bool();
-    });
-  }
+  /*
+  네이버 환율 정보를 크롤링 하는 함수
+   */
 
   Future<String> loadAsset(String path) async {
     return await rootBundle.loadString(path);
@@ -165,6 +153,23 @@ class _LoadingState extends State<Loading> {
         return ErrorPage();
       }), (route) => false);
     }
+  }
+
+  void initState() {
+    super.initState();
+    if (DateFormat('EEEE').format(now) == 'Saturday') {
+      now = now.subtract(Duration(days:1));
+    }
+    else if (DateFormat('EEEE').format(now) == 'Sunday') {
+      now = now.subtract(Duration(days:2));
+    }
+    formatDate = DateFormat('yyyyMMdd').format(now);
+    loadAsset(file_loc).then((value) {
+      setState(() {
+        api_keys = value;
+      });
+      check_bool();
+    });
   }
 
   @override
