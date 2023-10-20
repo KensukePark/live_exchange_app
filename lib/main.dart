@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:live_currency_rate_app/screens/loading.dart';
-import 'screens/home_page.dart';
-//import 'views/text_detector_view.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
