@@ -25,10 +25,10 @@ class _TestPageState extends State<TestPage> {
     var document = parse(response.body);
     var li = document
         ?.querySelectorAll('li[class="csp"]');
-    //li?.forEach((element) {print(element.text);});
     var li_d = document
         ?.querySelectorAll('li[class="csd"]');
-    var date = document?.querySelector('span[class="update_info"]');
+
+    //환율 차트 사진의 url을 불러오는 코드
     var img = document?.querySelectorAll('span[class="img_bx"]');
     List<String> img_src = [];
     for (int k=0; k<6; k++) {
@@ -41,8 +41,14 @@ class _TestPageState extends State<TestPage> {
       img_src.add(temp);
     }
     print(img_src);
-    /*
+    //환율 차트 기능 end
+
+    //환율 업데이트 날자를 불러오는 코드
+    var date = document?.querySelector('span[class="update_info"]');
     print(date?.text);
+    //업데이트 날자 end
+
+    //환율 정보를 불러오는 코드
     List<String> result = [];
     for (int n=0; n<3; n++) {
       var temp = '';
@@ -73,23 +79,7 @@ class _TestPageState extends State<TestPage> {
       }
     }
     print(result);
-
-     */
-
-    /*
-    var name = document
-        ?.querySelectorAll('span[class="name"]');
-    name?.forEach((element) {print(element.text);});
-    var price = document
-        ?.querySelectorAll('span[class="spt_con dw"]');
-    price?.forEach((element) {print(element.text);});
-    print(price);
-    var change = document
-        ?.querySelectorAll('span[class="ico"]');
-    change?.forEach((element) {print(element.text);});
-    print(change);
-
-     */
+    //환율 정보 end
 
   }
   @override
