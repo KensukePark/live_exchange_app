@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:live_currency_rate_app/screens/check_page.dart';
 import 'package:live_currency_rate_app/screens/loading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -69,9 +70,14 @@ class _ErrorPageTwoState extends State<ErrorPageTwo> {
                     ),
                     TextButton(
                       onPressed: () {
-                        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context){
-                          return Loading();
-                        }), (route) => false);
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return CheckPage();
+                            },
+                          ),
+                        );
                       },
                       child: Container(
                         child: Text(
