@@ -42,6 +42,7 @@ dependencies:
   flutter_spinkit:
   internet_connection_checker:
   html:
+  math_parser: ^1.5.1
 
 dev_dependencies:
   flutter_test:
