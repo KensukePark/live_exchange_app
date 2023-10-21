@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_scalable_ocr/flutter_scalable_ocr.dart';
 import 'package:intl/intl.dart';
+import 'package:live_currency_rate_app/screens/calcul_page.dart';
 import 'package:live_currency_rate_app/screens/check_page.dart';
 import 'package:live_currency_rate_app/screens/setting_page_OnOff.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -117,6 +118,31 @@ class _HomePageState extends State<HomePage> {
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => CheckPage()));
                 }
+              ),
+              InkWell(
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+                    height: MediaQuery.of(context).size.height / 16,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.calculate_outlined,
+                          size: 24,
+                        ),
+                        SizedBox(width: 10,),
+                        Text(
+                          '환율 계산기',
+                          style: TextStyle(
+                              fontSize: 16
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => CalPage()));
+                  }
               ),
               InkWell(
                 child: Container(
