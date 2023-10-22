@@ -40,6 +40,12 @@ Dart 3.0.2 <br>
 <img src="Screenshot_20231020_233909.png" width="216" height="528"/>
 <img src="live_currency_error_2.png" width="216" height="528"/>
 </p>
-  
 
+
+* 2023_10_22 <br>
+  환율 계산기 추가 <br>
+<p align="left">
+<img src="live_currency_cal.png" width="216" height="528"/>
+</p>
+  
   
