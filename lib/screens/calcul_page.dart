@@ -19,11 +19,15 @@ class _CalPageState extends State<CalPage> {
   String from_cur = 'KRW';
   String to_cur = 'USD';
   final exp = MathNodeExpression.fromString('3 + 2');
+  List<String> cur_unit = [];
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     print(exp.calc(MathVariableValues.x(0)));
+    print(widget.all_unit);
+    cur_unit = widget.all_unit;
+    print(cur_unit);
   }
   @override
   Widget build(BuildContext context) {
@@ -148,12 +152,29 @@ class _CalPageState extends State<CalPage> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+                                    /*
                                     Text(
                                       'USD',
                                       style: TextStyle(
                                           fontSize: 20,
                                           color: Colors.white
                                       ),
+                                    ),
+                                     */
+                                    DropdownButton(
+                                      iconSize: 0.0,
+                                      value: to_cur,
+                                      items: cur_unit.map((String item) {
+                                        return DropdownMenuItem<String>(
+                                          child: Text('$item'),
+                                          value: item,
+                                        );
+                                      }).toList(),
+                                      onChanged: (dynamic value) {
+                                        setState(() {
+                                          to_cur = value;
+                                        });
+                                      },
                                     ),
                                     SizedBox(height: 2,),
                                     Text(
@@ -351,24 +372,33 @@ class _CalPageState extends State<CalPage> {
                       ),
                       child: InkWell(
                         onTap: () {
-                          if (int.tryParse(money_one[money_one.length-1]) != null) {
+                          if (answer == '') {
+                            if (int.tryParse(money_one[money_one.length-1]) != null) {
+                              setState(() {
+                                money_one = money_one + '/';
+                              });
+                            }
+                            else if (money_one[money_one.length-1] == '/'
+                                || money_one[money_one.length-1] == '*'
+                                || money_one[money_one.length-1] == '-'
+                                || money_one[money_one.length-1] == '+'
+                                || money_one[money_one.length-1] == '.') {
+                              setState(() {
+                                money_one = money_one.substring(0,money_one.length-1) + '/';
+                              });
+                            }
                             setState(() {
-                              money_one = money_one + '/';
+                              answer = '';
+                              answer_two = '';
                             });
                           }
-                          else if (money_one[money_one.length-1] == '/'
-                              || money_one[money_one.length-1] == '*'
-                              || money_one[money_one.length-1] == '-'
-                              || money_one[money_one.length-1] == '+'
-                              || money_one[money_one.length-1] == '.') {
+                          else {
                             setState(() {
-                              money_one = money_one.substring(0,money_one.length-1) + '/';
+                              money_one = answer + '/';
+                              answer = '';
+                              answer_two = '';
                             });
                           }
-                          setState(() {
-                            answer = '';
-                            answer_two = '';
-                          });
                         },
                         child: Center(
                           child: Text(
@@ -403,11 +433,18 @@ class _CalPageState extends State<CalPage> {
                       ),
                       child: InkWell(
                         onTap: () {
-                          setState(() {
-                            money_one = money_one + '7';
-                            answer = '';
-                            answer_two = '';
-                          });
+                          if (answer == '') {
+                            setState(() {
+                              money_one = money_one + '7';
+                            });
+                          }
+                          else {
+                            setState(() {
+                              money_one = '7';
+                              answer = '';
+                              answer_two = '';
+                            });
+                          }
                         },
                         child: Center(
                           child: Text(
@@ -431,11 +468,18 @@ class _CalPageState extends State<CalPage> {
                       ),
                       child: InkWell(
                         onTap: () {
-                          setState(() {
-                            money_one = money_one + '8';
-                            answer = '';
-                            answer_two = '';
-                          });
+                          if (answer == '') {
+                            setState(() {
+                              money_one = money_one + '8';
+                            });
+                          }
+                          else {
+                            setState(() {
+                              money_one = '8';
+                              answer = '';
+                              answer_two = '';
+                            });
+                          }
                         },
                         child: Center(
                           child: Text(
@@ -459,11 +503,18 @@ class _CalPageState extends State<CalPage> {
                       ),
                       child: InkWell(
                         onTap: () {
-                          setState(() {
-                            money_one = money_one + '9';
-                            answer = '';
-                            answer_two = '';
-                          });
+                          if (answer == '') {
+                            setState(() {
+                              money_one = money_one + '9';
+                            });
+                          }
+                          else {
+                            setState(() {
+                              money_one = '9';
+                              answer = '';
+                              answer_two = '';
+                            });
+                          }
                         },
                         child: Center(
                           child: Text(
@@ -487,24 +538,33 @@ class _CalPageState extends State<CalPage> {
                       ),
                       child: InkWell(
                         onTap: () {
-                          if (int.tryParse(money_one[money_one.length-1]) != null) {
+                          if (answer == '') {
+                            if (int.tryParse(money_one[money_one.length-1]) != null) {
+                              setState(() {
+                                money_one = money_one + '*';
+                              });
+                            }
+                            else if (money_one[money_one.length-1] == '/'
+                                || money_one[money_one.length-1] == '*'
+                                || money_one[money_one.length-1] == '-'
+                                || money_one[money_one.length-1] == '+'
+                                || money_one[money_one.length-1] == '.') {
+                              setState(() {
+                                money_one = money_one.substring(0,money_one.length-1) + '*';
+                              });
+                            }
                             setState(() {
-                              money_one = money_one + '*';
+                              answer = '';
+                              answer_two = '';
                             });
                           }
-                          else if (money_one[money_one.length-1] == '/'
-                              || money_one[money_one.length-1] == '*'
-                              || money_one[money_one.length-1] == '-'
-                              || money_one[money_one.length-1] == '+'
-                              || money_one[money_one.length-1] == '.') {
+                          else {
                             setState(() {
-                              money_one = money_one.substring(0,money_one.length-1) + '*';
+                              money_one = answer + '*';
+                              answer = '';
+                              answer_two = '';
                             });
                           }
-                          setState(() {
-                            answer = '';
-                            answer_two = '';
-                          });
                         },
                         child: Center(
                           child: Text(
@@ -539,11 +599,18 @@ class _CalPageState extends State<CalPage> {
                       ),
                       child: InkWell(
                         onTap: () {
-                          setState(() {
-                            money_one = money_one + '4';
-                            answer = '';
-                            answer_two = '';
-                          });
+                          if (answer == '') {
+                            setState(() {
+                              money_one = money_one + '4';
+                            });
+                          }
+                          else {
+                            setState(() {
+                              money_one = '4';
+                              answer = '';
+                              answer_two = '';
+                            });
+                          }
                         },
                         child: Center(
                           child: Text(
@@ -567,11 +634,18 @@ class _CalPageState extends State<CalPage> {
                       ),
                       child: InkWell(
                         onTap: () {
-                          setState(() {
-                            money_one = money_one + '5';
-                            answer = '';
-                            answer_two = '';
-                          });
+                          if (answer == '') {
+                            setState(() {
+                              money_one = money_one + '5';
+                            });
+                          }
+                          else {
+                            setState(() {
+                              money_one = '5';
+                              answer = '';
+                              answer_two = '';
+                            });
+                          }
                         },
                         child: Center(
                           child: Text(
@@ -595,11 +669,18 @@ class _CalPageState extends State<CalPage> {
                       ),
                       child: InkWell(
                         onTap: () {
-                          setState(() {
-                            money_one = money_one + '6';
-                            answer = '';
-                            answer_two = '';
-                          });
+                          if (answer == '') {
+                            setState(() {
+                              money_one = money_one + '6';
+                            });
+                          }
+                          else {
+                            setState(() {
+                              money_one = '6';
+                              answer = '';
+                              answer_two = '';
+                            });
+                          }
                         },
                         child: Center(
                           child: Text(
@@ -623,24 +704,33 @@ class _CalPageState extends State<CalPage> {
                       ),
                       child: InkWell(
                         onTap: () {
-                          if (int.tryParse(money_one[money_one.length-1]) != null) {
+                          if (answer == '') {
+                            if (int.tryParse(money_one[money_one.length-1]) != null) {
+                              setState(() {
+                                money_one = money_one + '-';
+                              });
+                            }
+                            else if (money_one[money_one.length-1] == '/'
+                                || money_one[money_one.length-1] == '*'
+                                || money_one[money_one.length-1] == '-'
+                                || money_one[money_one.length-1] == '+'
+                                || money_one[money_one.length-1] == '.') {
+                              setState(() {
+                                money_one = money_one.substring(0,money_one.length-1) + '-';
+                              });
+                            }
                             setState(() {
-                              money_one = money_one + '-';
+                              answer = '';
+                              answer_two = '';
                             });
                           }
-                          else if (money_one[money_one.length-1] == '/'
-                              || money_one[money_one.length-1] == '*'
-                              || money_one[money_one.length-1] == '-'
-                              || money_one[money_one.length-1] == '+'
-                              || money_one[money_one.length-1] == '.') {
+                          else {
                             setState(() {
-                              money_one = money_one.substring(0,money_one.length-1) + '-';
+                              money_one = answer + '-';
+                              answer = '';
+                              answer_two = '';
                             });
                           }
-                          setState(() {
-                            answer = '';
-                            answer_two = '';
-                          });
                         },
                         child: Center(
                           child: Text(
@@ -675,11 +765,18 @@ class _CalPageState extends State<CalPage> {
                       ),
                       child: InkWell(
                         onTap: () {
-                          setState(() {
-                            money_one = money_one + '1';
-                            answer = '';
-                            answer_two = '';
-                          });
+                          if (answer == '') {
+                            setState(() {
+                              money_one = money_one + '1';
+                            });
+                          }
+                          else {
+                            setState(() {
+                              money_one = '1';
+                              answer = '';
+                              answer_two = '';
+                            });
+                          }
                         },
                         child: Center(
                           child: Text(
@@ -703,11 +800,18 @@ class _CalPageState extends State<CalPage> {
                       ),
                       child: InkWell(
                         onTap: () {
-                          setState(() {
-                            money_one = money_one + '2';
-                            answer = '';
-                            answer_two = '';
-                          });
+                          if (answer == '') {
+                            setState(() {
+                              money_one = money_one + '2';
+                            });
+                          }
+                          else {
+                            setState(() {
+                              money_one = '2';
+                              answer = '';
+                              answer_two = '';
+                            });
+                          }
                         },
                         child: Center(
                           child: Text(
@@ -731,11 +835,18 @@ class _CalPageState extends State<CalPage> {
                       ),
                       child: InkWell(
                         onTap: () {
-                          setState(() {
-                            money_one = money_one + '3';
-                            answer = '';
-                            answer_two = '';
-                          });
+                          if (answer == '') {
+                            setState(() {
+                              money_one = money_one + '3';
+                            });
+                          }
+                          else {
+                            setState(() {
+                              money_one = '3';
+                              answer = '';
+                              answer_two = '';
+                            });
+                          }
                         },
                         child: Center(
                           child: Text(
@@ -759,24 +870,33 @@ class _CalPageState extends State<CalPage> {
                       ),
                       child: InkWell(
                         onTap: () {
-                          if (int.tryParse(money_one[money_one.length-1]) != null) {
+                          if (answer == '') {
+                            if (int.tryParse(money_one[money_one.length-1]) != null) {
+                              setState(() {
+                                money_one = money_one + '+';
+                              });
+                            }
+                            else if (money_one[money_one.length-1] == '/'
+                                || money_one[money_one.length-1] == '*'
+                                || money_one[money_one.length-1] == '-'
+                                || money_one[money_one.length-1] == '+'
+                                || money_one[money_one.length-1] == '.') {
+                              setState(() {
+                                money_one = money_one.substring(0,money_one.length-1) + '+';
+                              });
+                            }
                             setState(() {
-                              money_one = money_one + '+';
+                              answer = '';
+                              answer_two = '';
                             });
                           }
-                          else if (money_one[money_one.length-1] == '/'
-                              || money_one[money_one.length-1] == '*'
-                              || money_one[money_one.length-1] == '-'
-                              || money_one[money_one.length-1] == '+'
-                              || money_one[money_one.length-1] == '.') {
+                          else {
                             setState(() {
-                              money_one = money_one.substring(0,money_one.length-1) + '+';
+                              money_one = answer + '+';
+                              answer = '';
+                              answer_two = '';
                             });
                           }
-                          setState(() {
-                            answer = '';
-                            answer_two = '';
-                          });
                         },
                         child: Center(
                           child: Text(
@@ -928,11 +1048,16 @@ class _CalPageState extends State<CalPage> {
                             setState(() {
                               answer = express.calc(MathVariableValues.x(0)).toString();
                             });
-                            //cur_list 에서 from_cur의 index를 찾아서
-                            //rate_list[index] * answer 로 한화로 바꾼 가격을 찾고
-                            //cur_lsit 에서 to_cur의 index2를 찾아서
-                            //rate_list[index] * answer / rate_list[index2] 를 answer_two에 넣으면됨.
-
+                            setState(() {
+                              //cur_list 에서 from_cur의 index를 찾아서
+                              int index1 = widget.all_unit.indexOf(from_cur);
+                              //rate_list[index] * answer 로 한화로 바꾼 가격을 찾고
+                              num temp_ans = widget.all_price[index1] * num.parse(answer);
+                              //cur_lsit 에서 to_cur의 index2를 찾아서
+                              int index2 = widget.all_unit.indexOf(to_cur);
+                              //rate_list[index] * answer / rate_list[index2] 를 answer_two에 넣으면됨.
+                              answer_two = (temp_ans / widget.all_price[index2]).toStringAsFixed(2);
+                            });
                           }
                         },
                         child: Center(
