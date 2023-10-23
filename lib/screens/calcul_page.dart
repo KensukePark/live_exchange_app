@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:math_parser/math_parser.dart';
 
 class CalPage extends StatefulWidget {
-  const CalPage({Key? key}) : super(key: key);
-
+  const CalPage({Key? key, required this.all_name, required this.all_price, required this.all_unit}) : super(key: key);
+  final List<String> all_name;
+  final List<String> all_unit;
+  final List<num> all_price;
   @override
   State<CalPage> createState() => _CalPageState();
 }
