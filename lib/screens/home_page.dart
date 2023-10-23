@@ -10,12 +10,15 @@ import 'package:live_currency_rate_app/screens/setting_page_OnOff.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key, required this.cur_name, required this.cur_rate, required this.date, required this.check, required this.mode_check}) : super(key: key);
+  const HomePage({Key? key, required this.cur_name, required this.cur_rate, required this.date, required this.check, required this.mode_check,  required this.all_unit , required this.all_name, required this.all_price}) : super(key: key);
   final List<String> cur_name;
   final List<num> cur_rate;
   final String date;
   final bool check;
   final bool mode_check;
+  final List<String> all_name;
+  final List<String> all_unit;
+  final List<num> all_price;
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -141,7 +144,11 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => CalPage()));
+                    if (widget.check == false) Navigator.push(context, MaterialPageRoute(builder: (context) => CalPage(all_name: widget.all_name, all_price: widget.all_price, all_unit: widget.all_unit,)));
+                    else {
+
+
+                    }
                   }
               ),
               InkWell(
