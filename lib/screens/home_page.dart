@@ -6,6 +6,7 @@ import 'package:flutter_scalable_ocr/flutter_scalable_ocr.dart';
 import 'package:intl/intl.dart';
 import 'package:live_currency_rate_app/screens/calcul_page.dart';
 import 'package:live_currency_rate_app/screens/check_page.dart';
+import 'package:live_currency_rate_app/screens/error_page_3.dart';
 import 'package:live_currency_rate_app/screens/setting_page_OnOff.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -143,11 +144,21 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                   ),
-                  onTap: () {
+                  onTap: () async {
                     if (widget.check == false) Navigator.push(context, MaterialPageRoute(builder: (context) => CalPage(all_name: widget.all_name, all_price: widget.all_price, all_unit: widget.all_unit,)));
                     else {
-
-
+                      var prefs = await SharedPreferences.getInstance();
+                      List<String> temp_rate = prefs.getStringList('user_rate')!;
+                      List<num> user_rate = [];
+                      temp_rate.forEach((element) {user_rate.add(num.parse(element));});
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return ErrorPageThr(check: widget.check, check_custom: widget.mode_check, user_rate: user_rate);
+                          },
+                        ),
+                      );
                     }
                   }
               ),
