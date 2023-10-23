@@ -126,8 +126,14 @@ class _LoadingState extends State<Loading> {
       }
       for (int i=0; i<Data.length; i++) {
         all_cur_name_list.add(Data[i]['cur_nm']);
-        all_cur_unit_list.add(Data[i]['cur_unit']);
-        all_cur_price_list.add(num.parse(Data[i]['bkpr'].toString().replaceAll(',', '')));
+        if (Data[i]['cur_unit'].toString().contains('(100)')) {
+          all_cur_unit_list.add(Data[i]['cur_unit'].toString().replaceAll('(100)', ''));
+          all_cur_price_list.add(num.parse(Data[i]['bkpr'].toString().replaceAll(',', ''))/100);
+        }
+        else {
+          all_cur_unit_list.add(Data[i]['cur_unit']);
+          all_cur_price_list.add(num.parse(Data[i]['bkpr'].toString().replaceAll(',', '')));
+        }
         //print(Data[i]['bkpr']);
         //print(Data[i]['bkpr'].toString().replaceAll(',', ''));
         if (Data[i]['cur_unit'] == 'CNH') {
