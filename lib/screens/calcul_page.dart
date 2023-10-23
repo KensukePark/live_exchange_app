@@ -14,6 +14,8 @@ class _CalPageState extends State<CalPage> {
   String answer = '';
   String money_two = '';
   String answer_two = '';
+  String from_cur = 'KRW';
+  String to_cur = 'USD';
   final exp = MathNodeExpression.fromString('3 + 2');
   @override
   void initState() {
@@ -926,6 +928,7 @@ class _CalPageState extends State<CalPage> {
                               answer_two = (express.calc(MathVariableValues.x(0)) / 1100).toStringAsFixed(2);
                             });
                           }
+
                         },
                         child: Center(
                           child: Text(
