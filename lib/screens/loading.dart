@@ -25,6 +25,9 @@ class _LoadingState extends State<Loading> {
   late bool check;
   late bool check_custom;
   late List<String> temp_list;
+  List<String> all_cur_unit_list = [];
+  List<String> all_cur_name_list = [];
+  List<num> all_cur_price_list = [];
   @override
 
   /*
@@ -90,7 +93,7 @@ class _LoadingState extends State<Loading> {
     print(cur_list);
     print(cur_rate);
     Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context){
-      return HomePage(cur_name: cur_list, cur_rate: cur_rate, date: formatDate, check: check, mode_check: check_custom);
+      return HomePage(cur_name: cur_list, cur_rate: cur_rate, date: formatDate, check: check, mode_check: check_custom, all_unit: [], all_name: [], all_price: [],);
     }), (route) => false);
   }
 
@@ -122,6 +125,9 @@ class _LoadingState extends State<Loading> {
         print('인터넷 연결 오류');
       }
       for (int i=0; i<Data.length; i++) {
+        all_cur_name_list.add(Data[i]['cur_nm']);
+        all_cur_unit_list.add(Data[i]['cur_unit']);
+        all_cur_price_list.add(num.parse(Data[i]['bkpr']));
         if (Data[i]['cur_unit'] == 'CNH') {
           cur_list.add('CNY');
           cur_rate.add(num.parse(Data[i]['deal_bas_r']));
@@ -144,7 +150,7 @@ class _LoadingState extends State<Loading> {
       print(cur_list);
       print(cur_rate);
       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context){
-        return HomePage(cur_name: cur_list, cur_rate: cur_rate, date: formatDate, check: check, mode_check: check_custom);
+        return HomePage(cur_name: cur_list, cur_rate: cur_rate, date: formatDate, check: check, mode_check: check_custom, all_unit: all_cur_unit_list, all_name: all_cur_name_list, all_price: all_cur_price_list,);
       }), (route) => false);
     }
     else {
