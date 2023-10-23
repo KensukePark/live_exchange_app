@@ -304,8 +304,6 @@ class _OnOffPageState extends State<OnOffPage> {
                         ),
                       ],
                     ),
-
-
                   ],
                 ),
               ) : Container(),
