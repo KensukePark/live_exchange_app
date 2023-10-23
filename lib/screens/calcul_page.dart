@@ -925,10 +925,13 @@ class _CalPageState extends State<CalPage> {
                             print(express.calc(MathVariableValues.x(0)));
                             setState(() {
                               answer = express.calc(MathVariableValues.x(0)).toString();
-                              answer_two = (express.calc(MathVariableValues.x(0)) / 1100).toStringAsFixed(2);
                             });
-                          }
+                            //cur_list 에서 from_cur의 index를 찾아서
+                            //rate_list[index] * answer 로 한화로 바꾼 가격을 찾고
+                            //cur_lsit 에서 to_cur의 index2를 찾아서
+                            //rate_list[index] * answer / rate_list[index2] 를 answer_two에 넣으면됨.
 
+                          }
                         },
                         child: Center(
                           child: Text(
