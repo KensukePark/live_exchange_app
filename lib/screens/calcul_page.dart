@@ -150,7 +150,7 @@ class _CalPageState extends State<CalPage> {
                               child: Center(
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     /*
                                     Text(
@@ -162,11 +162,18 @@ class _CalPageState extends State<CalPage> {
                                     ),
                                      */
                                     DropdownButton(
+                                      underline: Container(),
                                       iconSize: 0.0,
                                       value: to_cur,
                                       items: cur_unit.map((String item) {
                                         return DropdownMenuItem<String>(
-                                          child: Text('$item'),
+                                          child: Text(
+                                            '$item',
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                color: Colors.black
+                                            ),
+                                          ),
                                           value: item,
                                         );
                                       }).toList(),
@@ -178,7 +185,7 @@ class _CalPageState extends State<CalPage> {
                                     ),
                                     SizedBox(height: 2,),
                                     Text(
-                                      '미국달러',
+                                      widget.all_name[widget.all_unit.indexOf(to_cur)],
                                       style: TextStyle(
                                           fontSize: 13,
                                           color: Colors.white
