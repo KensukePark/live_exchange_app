@@ -68,21 +68,36 @@ class _CalPageState extends State<CalPage> {
                               child: Center(
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Text(
-                                      'KRW',
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          color: Colors.black
-                                      ),
+                                    DropdownButton(
+                                      underline: Container(),
+                                      iconSize: 0.0,
+                                      value: from_cur,
+                                      items: cur_unit.map((String item) {
+                                        return DropdownMenuItem<String>(
+                                          child: Text(
+                                            '$item',
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                color: Colors.black
+                                            ),
+                                          ),
+                                          value: item,
+                                        );
+                                      }).toList(),
+                                      onChanged: (dynamic value) {
+                                        setState(() {
+                                          from_cur = value;
+                                        });
+                                      },
                                     ),
                                     SizedBox(height: 2,),
                                     Text(
-                                      '원',
+                                      widget.all_name[widget.all_unit.indexOf(from_cur)],
                                       style: TextStyle(
-                                        fontSize: 13,
-                                        color: Colors.grey
+                                          fontSize: 13,
+                                          color: Colors.grey
                                       ),
                                     )
                                   ],
@@ -234,7 +249,13 @@ class _CalPageState extends State<CalPage> {
                                     )
                                 ),
                                 child: InkWell(
-                                  onTap: () {},
+                                  onTap: () {
+                                    setState(() {
+                                      var temp = to_cur;
+                                      to_cur = from_cur;
+                                      from_cur = temp;
+                                    });
+                                  },
                                   child: Center(
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.center,
