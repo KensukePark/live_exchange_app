@@ -48,4 +48,7 @@ Dart 3.0.2 <br>
 <img src="live_currency_cal.png" width="216" height="528"/>
 </p>
   
-  
+* 2023_10_25 <br>
+  환율 계산기 지원 통화 추가 <br>
+  지원 통화 리스트 <br>
+  AED, AUD, BHD, BND, CAD, CHF, CNH, DKK, EUR, GBP, HKD, IDR, JPY, KRW, KWD, MYR, NOK, NZD, SAR, SEK, SGD, THB, USD <br>
